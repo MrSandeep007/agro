@@ -1,10 +1,8 @@
 package com.jsp.agro.service;
 
-import java.io.IOException;
-import java.time.LocalDate;
+import java.io.IOException; 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.jsp.agro.DAO.ImageDAO;
 import com.jsp.agro.DAO.PostDAO;
 import com.jsp.agro.DAO.UserDAO;
 import com.jsp.agro.entity.Image;
@@ -28,6 +27,8 @@ public class PostService {
 	PostDAO pdao;
 	@Autowired
 	UserDAO udao;
+	@Autowired
+	ImageDAO idao;
 	
 	ResponseStructure<Post> rs= new ResponseStructure<Post>();
 	public ResponseEntity<ResponseStructure<Post>> savePost(int userId, MultipartFile file, String caption, String location) throws IOException{
@@ -68,4 +69,37 @@ public class PostService {
 			throw new PostNotFoundException("Post not found with Id: "+id);
 		}
 	}
+	public ResponseEntity<ResponseStructure<String>> deletePostById(int id) {
+		ResponseStructure<String> rss= new ResponseStructure<String>();
+		Post p=pdao.fetchPostById(id);
+		if(p!=null) {
+			List<User> user = udao.findAll();
+			for(User u:user) {
+				if(u.getPost().contains(p)) {
+					u.getPost().remove(p);
+					udao.updateUser(u);
+				}
+				
+			}
+			Image i=p.getImage();
+			p.setImage(null);
+			idao.deleteImage(i);
+			pdao.deletePost(id);
+			rss.setMessage("Post Deleted Successfully");
+			rss.setStatus(HttpStatus.OK.value());
+			rss.setData("Post deleted with the id : "+id);
+			return new ResponseEntity<ResponseStructure<String>>(rss, HttpStatus.OK);
+		}
+		else {
+			throw new PostNotFoundException("Post not found with Id : "+id);
+		}
+	}
+	public ResponseEntity<ResponseStructure<Post>> updatePost(Post post){
+		pdao.updatePost(post);
+		rs.setMessage("Post updated successfully");
+		rs.setStatus(HttpStatus.ACCEPTED.value());
+		rs.setData(post);
+		return new ResponseEntity<ResponseStructure<Post>>(rs,HttpStatus.ACCEPTED);
+	}
+	
 }

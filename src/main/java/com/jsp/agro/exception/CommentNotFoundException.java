@@ -7,6 +7,6 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ImageNotFoundException extends RuntimeException{
-	String message="Image not found";
+public class CommentNotFoundException extends RuntimeException{
+	String message="Comment not found";
 }

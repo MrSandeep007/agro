@@ -1,26 +1,25 @@
 package com.jsp.agro.entity;
 
-import javax.persistence.Column;
+import java.time.LocalDateTime;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Lob;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
-public class Image {
+public class Payment {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
-	private String name;
-	@Lob
-	@Column(length = 1000000000, columnDefinition = "LONGBLOB")
-	private byte[] data;
+	private double ammount;
+	private LocalDateTime time=LocalDateTime.now();
+	private String modeOfPay;
 }

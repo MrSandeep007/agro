@@ -1,12 +1,12 @@
 package com.jsp.agro.exception;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ImageNotFoundException extends RuntimeException{
-	String message="Image not found";
+@Getter
+public class EquipementNotFound extends RuntimeException{
+	private String message="Equipement Not Found";
 }

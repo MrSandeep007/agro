@@ -1,26 +1,29 @@
 package com.jsp.agro.entity;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
-public class Image {
+public class Equipement {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	private String name;
-	@Lob
-	@Column(length = 1000000000, columnDefinition = "LONGBLOB")
-	private byte[] data;
+	private float costPerHour;
+	private int noOfItems;
+	@ManyToOne
+	@JsonIgnore
+	private User user;
 }
